@@ -4,8 +4,9 @@ import path from "node:path";
 import { pipeline } from "node:stream/promises";
 import { Readable } from "node:stream";
 
+const HADITH_JSON_GIT_REF = "v1.2.0";
 const CORPUS_VERSION = "hadith-json-v1.2.0";
-const BASE_URL = `https://raw.githubusercontent.com/AhmedBaset/hadith-json/${CORPUS_VERSION}/db/by_book/the_9_books`;
+const BASE_URL = `https://raw.githubusercontent.com/AhmedBaset/hadith-json/${HADITH_JSON_GIT_REF}/db/by_book/the_9_books`;
 
 const BOOKS = [
   { slug: "bukhari", file: "bukhari.json", title: "Sahih al-Bukhari" },
