@@ -23,11 +23,25 @@ Output: `data/corpus/*.mxjsonl` (six books, one hadith per line).
 
 ### 2. Upload to Mixedbread
 
-Creates store `kutub-sittah-v1` (if missing) and uploads all six files:
+Creates store `kutub-sittah-v1` (if missing) and uploads all six files. **Resume-safe:** skips files already `completed` in the store.
 
 ```bash
 npm run upload:corpus
 ```
+
+Upload one book after upgrading credits:
+
+```bash
+npm run upload:corpus -- --only muslim
+```
+
+Re-upload everything (overwrite):
+
+```bash
+npm run upload:corpus -- --force
+```
+
+**Note:** ~34k bilingual hadith chunks exceed Mixedbread Starter ($5) credits. Expect roughly **$30–50 one-time ingest** at usage rates, plus ~$7.50/1k agentic QA queries. [Scale ($20/mo)](https://www.mixedbread.com/pricing) or [startup credits (up to $250)](https://www.mixedbread.com/pricing) are the practical paths for full corpus + production.
 
 ### 3. Run locally
 
