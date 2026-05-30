@@ -3,6 +3,8 @@ import path from "node:path";
 
 import { Mixedbread } from "@mixedbread/sdk";
 
+import "../load-env";
+
 const STORE_NAME = process.env.MXBAI_STORE_ID ?? "kutub-sittah-v1";
 const CORPUS_VERSION = "hadith-json-v1.2.0";
 
@@ -37,7 +39,9 @@ async function ensureStore(client: Mixedbread) {
 async function main() {
   const apiKey = process.env.MXBAI_API_KEY;
   if (!apiKey) {
-    throw new Error("MXBAI_API_KEY is required");
+    throw new Error(
+      "MXBAI_API_KEY is required. Run `vercel env pull .env.local` or set the key in .env.local.",
+    );
   }
 
   const client = new Mixedbread({ apiKey });
