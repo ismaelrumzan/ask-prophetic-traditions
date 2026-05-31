@@ -44,3 +44,4 @@ next-env.d.ts
 
 # generated corpus (run npm run build:corpus)
 /data/corpus/*.mxjsonl
+.env*

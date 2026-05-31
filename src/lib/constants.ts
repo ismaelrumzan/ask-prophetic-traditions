@@ -1,5 +1,3 @@
-export const STORE_ID = process.env.MXBAI_STORE_ID ?? "kutub-sittah-v1";
-
 export const CORPUS_VERSION = "hadith-json-v1.2.0";
 
 export const EXAMPLE_PROMPTS = [

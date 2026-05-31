@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { askHadithQuestion, buildQueryFromHistory } from "@/lib/mixedbread";
+import { buildQueryFromHistory } from "@/lib/chat-query";
+import { askHadithQuestion } from "@/lib/hadith-search";
 import { enforceRateLimit } from "@/lib/rate-limit";
 import type { ChatRequestBody, ChatResponseBody } from "@/lib/types";
 

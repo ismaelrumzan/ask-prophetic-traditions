@@ -1,16 +1,5 @@
+import { parseSearchText } from "@/lib/hadith-text";
 import type { HadithSource } from "@/lib/types";
-
-function extractArabicEnglish(text?: string) {
-  if (!text) return { arabic: "", english: "" };
-
-  const arabicMatch = text.match(/Arabic:\s*([\s\S]*?)(?:\n\nEnglish:|$)/i);
-  const englishMatch = text.match(/English:\s*([\s\S]*?)$/i);
-
-  return {
-    arabic: arabicMatch?.[1]?.trim() ?? "",
-    english: englishMatch?.[1]?.trim() ?? text,
-  };
-}
 
 export function EvidenceCard({
   source,
@@ -19,7 +8,7 @@ export function EvidenceCard({
   source: HadithSource;
   citeNumber: number;
 }) {
-  const { arabic, english } = extractArabicEnglish(source.text);
+  const { arabic, english } = parseSearchText(source.text);
   const label =
     source.collectionLabel && source.hadithNumber
       ? `${source.collectionLabel} · ${source.hadithNumber}`

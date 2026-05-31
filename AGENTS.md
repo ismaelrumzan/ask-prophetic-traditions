@@ -6,8 +6,9 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # Ask Prophetic Traditions
 
-RAG chat over Kutub al-Sittah via Mixedbread native `question_answering` (no separate LLM).
+RAG chat over Kutub al-Sittah: Ollama embeddings (search) + AI Gateway LLM (answers).
 
 - **Design spec:** `docs/DESIGN.md`
-- **Corpus ingest:** `npm run build:corpus` → `npm run upload:corpus`
-- **Store:** `kutub-sittah-v1` with six `.mxjsonl` files (one hadith = one chunk)
+- **Corpus ingest:** `npm run build:corpus` → `npm run db:migrate` → `npm run db:migrate:qwen3` (from bge-m3) → `npm run seed:corpus`
+- **Embeddings:** Qwen3 0.6B via Ollama or `alibaba/qwen3-embedding-0.6b` on Gateway — same provider for seed + query
+- **Schema:** `db/schema.sql` — `hadiths.embedding halfvec(1024)`

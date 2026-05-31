@@ -8,12 +8,18 @@
     "start": "next start",
     "lint": "eslint",
     "build:corpus": "tsx scripts/ingest/build-mxjsonl.ts",
-    "upload:corpus": "tsx scripts/ingest/upload-store.ts"
+    "db:migrate": "tsx scripts/ingest/migrate-db.ts",
+    "db:migrate:ollama": "tsx scripts/ingest/migrate-ollama.ts",
+    "db:migrate:halfvec": "tsx scripts/ingest/migrate-halfvec.ts",
+    "db:migrate:qwen3": "tsx scripts/ingest/migrate-qwen3.ts",
+    "seed:corpus": "tsx scripts/ingest/seed-neon.ts",
+    "seed:status": "tsx scripts/ingest/seed-status.ts"
   },
   "dependencies": {
-    "@mixedbread/sdk": "^0.72.0",
+    "@neondatabase/serverless": "^1.0.1",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.0",
+    "ai": "^5.0.76",
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4"
@@ -23,10 +29,12 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/ws": "^8.18.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
     "tsx": "^4.22.3",
-    "typescript": "^5"
+    "typescript": "^5",
+    "ws": "^8.18.3"
   }
 }
