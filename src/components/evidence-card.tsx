@@ -41,7 +41,11 @@ export function EvidenceCard({
           {arabic}
         </p>
       ) : null}
-      {english ? <p className="evidence-card__english">{english}</p> : null}
+      {english ? (
+        <p className="evidence-card__english" dir="ltr" lang="en">
+          {english}
+        </p>
+      ) : null}
     </article>
   );
 }

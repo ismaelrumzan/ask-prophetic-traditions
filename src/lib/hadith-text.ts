@@ -1,4 +1,7 @@
-const ARABIC_RE = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/g;
+const ARABIC_RE =
+  /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/g;
+
+const BIDI_MARKS_RE = /[\u200E\u200F\u061C\u202A-\u202E\u2066-\u2069]/g;
 
 /** Parse bilingual chunk text stored in `hadiths.search_text`. */
 export function parseSearchText(text?: string) {
@@ -7,14 +10,17 @@ export function parseSearchText(text?: string) {
   }
 
   const narratorMatch = text.match(/^Narrator:\s*(.+)$/im);
-  const arabicMatch = text.match(/Arabic:\s*([\s\S]*?)(?:\n\nEnglish:|$)/i);
-  const englishMatch = text.match(/English:\s*([\s\S]*?)$/i);
-
   const narrator = narratorMatch?.[1]?.trim() ?? "";
-  const arabic = arabicMatch?.[1]?.trim() ?? "";
-  let english = englishMatch?.[1]?.trim() ?? "";
 
-  english = english.replace(ARABIC_RE, " ").replace(/\s+/g, " ").trim();
+  const englishParts = text.split(/\nEnglish:\s*/i);
+  const beforeEnglish = englishParts[0] ?? text;
+  let english =
+    englishParts.length >= 2 ? englishParts.slice(1).join("\nEnglish: ").trim() : "";
+
+  const arabicMatch = beforeEnglish.match(/Arabic:\s*([\s\S]*)$/i);
+  const arabic = arabicMatch?.[1]?.trim() ?? "";
+
+  english = cleanEnglish(english);
 
   if (!english && !arabic) {
     return { arabic: "", english: text.trim(), narrator };
@@ -30,6 +36,17 @@ export function parseSearchText(text?: string) {
   english = dedupeEnglish(english);
 
   return { arabic, english, narrator };
+}
+
+function cleanEnglish(english: string) {
+  return english
+    .replace(ARABIC_RE, " ")
+    .replace(BIDI_MARKS_RE, "")
+    .replace(/\uFDFA/g, "")
+    .replace(/\(\s*\)/g, " ")
+    .replace(/\s+([,.;:!?])/g, "$1")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function dedupeEnglish(english: string) {
