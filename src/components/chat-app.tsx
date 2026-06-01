@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 
 import { AnswerContent } from "@/components/answer-content";
-import { EvidenceCard } from "@/components/evidence-card";
+import { EvidenceStack } from "@/components/evidence-stack";
 import { EXAMPLE_PROMPTS } from "@/lib/constants";
 import type { ChatMessage } from "@/lib/types";
 import {
@@ -167,16 +167,10 @@ export function ChatApp() {
               <>
                 <AnswerContent content={message.content} sources={message.sources} />
                 {message.sources?.length ? (
-                  <div className="evidence-stack">
-                    <p className="evidence-stack__label">Evidence</p>
-                    {message.sources.map((source) => (
-                      <EvidenceCard
-                        key={source.index}
-                        source={source}
-                        citeNumber={source.index}
-                      />
-                    ))}
-                  </div>
+                  <EvidenceStack
+                    content={message.content}
+                    sources={message.sources}
+                  />
                 ) : null}
               </>
             ) : (

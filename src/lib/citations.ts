@@ -1,5 +1,17 @@
 const CITE_TAG = /<cite\s+i="(\d+)"\s*\/>/g;
 
+export function extractCitedIndices(content: string) {
+  const indices = new Set<number>();
+  const regex = new RegExp(CITE_TAG.source, "g");
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(content)) !== null) {
+    indices.add(Number(match[1]));
+  }
+
+  return indices;
+}
+
 export function stripCiteTags(text: string) {
   return text.replace(CITE_TAG, "");
 }
