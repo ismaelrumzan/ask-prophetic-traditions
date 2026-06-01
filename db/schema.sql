@@ -20,3 +20,11 @@ CREATE INDEX IF NOT EXISTS hadiths_collection_idx ON hadiths (collection);
 CREATE INDEX IF NOT EXISTS hadiths_embedding_idx
   ON hadiths
   USING hnsw (embedding halfvec_cosine_ops);
+
+ALTER TABLE hadiths
+  ADD COLUMN IF NOT EXISTS search_vector tsvector
+  GENERATED ALWAYS AS (to_tsvector('english', search_text)) STORED;
+
+CREATE INDEX IF NOT EXISTS hadiths_search_vector_idx
+  ON hadiths
+  USING GIN (search_vector);

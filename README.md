@@ -36,6 +36,12 @@ npm run db:migrate
 npm run db:migrate:qwen3
 ```
 
+**Hybrid keyword + vector search** (adds `search_vector` FTS index — no re-embed):
+
+```bash
+npm run db:migrate:hybrid
+```
+
 ### 3. Seed embeddings (Ollama — recommended for bulk ingest)
 
 ```bash
@@ -51,6 +57,15 @@ Overwrite one book: `npm run seed:corpus -- --only=bukhari --force`
 
 ```bash
 npm run dev
+```
+
+### Debug retrieval
+
+```bash
+npm run eval:retrieval -- --case=neighbours
+npm run eval:retrieval -- --case=neighbours --compare
+npm run eval:retrieval -- --all
+npm run eval:retrieval -- --query="neighbour rights" --gold=muslim:79,abudawud:3518 --top=25
 ```
 
 ## Embedding model (Qwen3-Embedding-0.6B)
@@ -75,8 +90,12 @@ npm run dev
 | `OLLAMA_EMBEDDING_MODEL` | Default `qwen3-embedding:0.6b` |
 | `GATEWAY_EMBEDDING_MODEL` | Default `alibaba/qwen3-embedding-0.6b` |
 | `OLLAMA_BASE_URL` | Ollama API (local or hosted) |
-| `VERCEL_OIDC_TOKEN` | AI Gateway for **chat only** |
+| `VERCEL_OIDC_TOKEN` | AI Gateway for **chat** (and optional rerank) |
 | `CHAT_MODEL` | Default `openai/gpt-4o-mini` |
+| `HYBRID_SEARCH` | Default `true` — FTS + vector + RRF (needs `db:migrate:hybrid`) |
+| `HYBRID_CANDIDATE_LIMIT` | Default `50` candidates per leg before fusion |
+| `RETRIEVAL_RERANK` | Default `false` — Gateway rerank after hybrid recall |
+| `RERANK_MODEL` | Default `cohere/rerank-v3.5` |
 
 ## Deploy (Vercel)
 

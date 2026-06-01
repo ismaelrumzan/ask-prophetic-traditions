@@ -2,64 +2,13 @@ import { generateText } from "ai";
 
 import { getChatModel } from "@/lib/ai";
 import { COLLECTION_LABELS } from "@/lib/constants";
-import { getSql, vectorLiteral } from "@/lib/db";
-import { embedQuery } from "@/lib/embeddings";
 import { QA_INSTRUCTIONS } from "@/lib/instructions";
+import { searchHadiths, type HadithRow } from "@/lib/retrieval";
 import type { HadithSource } from "@/lib/types";
 
-type HadithRow = {
-  collection: string;
-  hadith_number: number;
-  search_text: string;
-  chapter_en: string;
-  chapter_ar: string;
-  reference_url: string;
-  score: number;
-};
+export type { HadithRow };
 
-export async function searchHadiths(
-  query: string,
-  topK = 8,
-  collection?: string,
-): Promise<HadithRow[]> {
-  const embedding = await embedQuery(query);
-
-  const sql = getSql();
-  const vec = vectorLiteral(embedding);
-
-  if (collection) {
-    const rows = await sql`
-      SELECT
-        collection,
-        hadith_number,
-        search_text,
-        chapter_en,
-        chapter_ar,
-        reference_url,
-        1 - (embedding <=> ${vec}::halfvec) AS score
-      FROM hadiths
-      WHERE collection = ${collection}
-      ORDER BY embedding <=> ${vec}::halfvec
-      LIMIT ${topK}
-    `;
-    return rows as HadithRow[];
-  }
-
-  const rows = await sql`
-    SELECT
-      collection,
-      hadith_number,
-      search_text,
-      chapter_en,
-      chapter_ar,
-      reference_url,
-      1 - (embedding <=> ${vec}::halfvec) AS score
-    FROM hadiths
-    ORDER BY embedding <=> ${vec}::halfvec
-    LIMIT ${topK}
-  `;
-  return rows as HadithRow[];
-}
+export { searchHadiths };
 
 function mapToSources(rows: HadithRow[]): HadithSource[] {
   return rows.map((row, index) => ({
@@ -94,7 +43,7 @@ function buildEvidenceContext(sources: HadithSource[]): string {
 }
 
 export async function askHadithQuestion(query: string) {
-  const rows = await searchHadiths(query);
+  const { rows } = await searchHadiths(query);
   const sources = mapToSources(rows);
 
   if (!sources.length) {
